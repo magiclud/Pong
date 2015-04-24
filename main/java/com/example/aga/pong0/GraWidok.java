@@ -19,36 +19,9 @@ import java.util.ArrayList;
  */
 public class GraWidok extends View {
 
-    MainActivity mainActivity;
-
-    private Paint pole;
-    private Paint liniePola;
-    private Paint graczNiebPaint;
-    private Paint graczCzerPaint;
-    private Paint pilkaPaint;
-
-    private float x1GraczNieb;
-    private float x2GraczNieb;
-    private float y1GraczNieb;
-    private float y2GraczNieb;
-
-    private float x1GraczCzer;
-    private float x2GraczCzer;
-    private float y1GraczCzer;
-    private float y2GraczCzer;
-
-    private float xPilka;
-    private float yPilka;
-    private float rPilka;
-
-    private int dx = 10;//predkosc
-    private int dy = 10;
-
-    private int punktyCzerwonegoInt=0;
-    private int punktyNiebieskiegoInt=0;
-
+    private MainActivity mainActivity;
+    private ElementyGry element;
     private Handler handler;
-
 
     //AttributeSet is used when I create xml layout in
 
@@ -58,54 +31,53 @@ public class GraWidok extends View {
         mainActivity = (MainActivity)context;
         setFocusable(true);
         setFocusableInTouchMode(true);
-
+        element = new ElementyGry();
         init();
 
         handler = new Handler(Looper.getMainLooper()) {
         };
-
     }
 
 
     private void init() {
         Log.d("Cykl Zycia ","init");
-        x1GraczNieb = 8;
-        x2GraczNieb = getHeight()/2 -100;
-        y1GraczNieb = 50;
-        y2GraczNieb = 150;
+        element.x1GraczNieb = 8;
+        element.x2GraczNieb = getHeight()/2 -100;
+        element.y1GraczNieb = 50;
+        element.y2GraczNieb = 150;
 
-       x1GraczCzer = getWidth()-58;
-       x2GraczCzer = getHeight()/2-100;
-       y1GraczCzer = 50;
-       y2GraczCzer = 150;
+        element.x1GraczCzer = getWidth()-58;
+        element. x2GraczCzer = getHeight()/2-100;
+        element.y1GraczCzer = 50;
+        element.y2GraczCzer = 150;
 
-        xPilka =getWidth()/2;
-        yPilka = getHeight()/2;
-        rPilka = 30;
+        element.xPilka =getWidth()/2;
+        element.yPilka = getHeight()/2;
+        element.rPilka = 30;
 
-        pole = new Paint();
-        pole.setColor(getResources().getColor(R.color.zolty));
-        liniePola = new Paint();
-        liniePola.setColor(Color.WHITE);
-        liniePola.setStyle(Paint.Style.STROKE);
-        liniePola.setStrokeWidth(16f);
+        element.pole = new Paint();
+        element.pole.setColor(getResources().getColor(R.color.zolty));
+        element.liniePola = new Paint();
+        element.liniePola.setColor(Color.WHITE);
+        element.liniePola.setStyle(Paint.Style.STROKE);
+        element.liniePola.setStrokeWidth(16f);
 
-        pilkaPaint = new Paint();
-        pilkaPaint.setStyle(Paint.Style.FILL);
-        pilkaPaint.setColor(Color.MAGENTA);
+        element.pilkaPaint = new Paint();
+        element.pilkaPaint.setStyle(Paint.Style.FILL);
+        element.pilkaPaint.setColor(Color.MAGENTA);
 
-        graczNiebPaint = new Paint();
-        graczNiebPaint.setTextSize(100);
-        graczNiebPaint.setColor(Color.BLUE);
+        element.graczNiebPaint = new Paint();
+        element. graczNiebPaint.setTextSize(100);
+        element.graczNiebPaint.setColor(Color.BLUE);
 
-        graczCzerPaint = new Paint();
-        graczCzerPaint.setTextSize(100);
-        graczCzerPaint.setColor(Color.RED);
+        element.graczCzerPaint = new Paint();
+        element.graczCzerPaint.setTextSize(100);
+        element.graczCzerPaint.setColor(Color.RED);
     }
 
     // metoda wywoluje sie na poczatku przed tworzeniem widoku
 protected void onSizeChanged(int w, int h, int oldw, int oldh){
-    Log.d("Cykl Zycia ","onSizeChanged");
+     Log.d("Cykl Zycia ","onSizeChanged");
 
      init();// <- ustawienia kolorow, itp. wartosci poczatkowe
 }
@@ -113,18 +85,18 @@ protected void onSizeChanged(int w, int h, int oldw, int oldh){
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawRect(0, 0, getWidth(), getHeight(), pole);
-        canvas.drawRect(0,0,getWidth(),getHeight(),liniePola);
+        canvas.drawRect(0, 0, getWidth(), getHeight(), element.pole);
+        canvas.drawRect(0,0,getWidth(),getHeight(),element.liniePola);
 
-        canvas.drawLine(getWidth()/2, 0, getWidth()/2 , getWidth(), liniePola);
+        canvas.drawLine(getWidth()/2, 0, getWidth()/2 , getWidth(), element.liniePola);
 
-        canvas.drawCircle(xPilka, yPilka, rPilka, pilkaPaint);
+        canvas.drawCircle(element.xPilka, element.yPilka, element.rPilka, element.pilkaPaint);
 
-        canvas.drawRect(x1GraczNieb, x2GraczNieb, x1GraczNieb+y1GraczNieb, x2GraczNieb+y2GraczNieb, graczNiebPaint);
-        canvas.drawText(String.valueOf(punktyNiebieskiegoInt), getWidth() / 2 - 100, 100, graczNiebPaint);
+        canvas.drawRect(element.x1GraczNieb, element.x2GraczNieb, element.x1GraczNieb+element.y1GraczNieb, element.x2GraczNieb+element.y2GraczNieb, element.graczNiebPaint);
+        canvas.drawText(String.valueOf(element.punktyNiebieskiegoInt), getWidth() / 2 - 100, 100, element.graczNiebPaint);
 
-        canvas.drawRect(x1GraczCzer, x2GraczCzer, x1GraczCzer+y1GraczCzer, x2GraczCzer+y2GraczCzer, graczCzerPaint);
-        canvas.drawText(String.valueOf(punktyCzerwonegoInt), getWidth()/2 + 40, 100, graczCzerPaint);
+        canvas.drawRect(element.x1GraczCzer, element.x2GraczCzer, element.x1GraczCzer+element.y1GraczCzer, element.x2GraczCzer+element.y2GraczCzer, element.graczCzerPaint);
+        canvas.drawText(String.valueOf(element.punktyCzerwonegoInt), getWidth()/2 + 40, 100, element.graczCzerPaint);
 
 
         aktualizujPolozenieKulki();
@@ -149,56 +121,61 @@ protected void onSizeChanged(int w, int h, int oldw, int oldh){
     }
 
     private void aktualizujPolozenieKulki() {
-        zmienPolozenieKulki();
-        if(xPilka > getWidth()-(y1GraczCzer+rPilka) ){
+        element.xPilka += element.dx;
+        element.yPilka += element.dy;
+        sprawdzCzyPunktDlaNiebieskiego();
+        sprawdzCzyPunktDlaCzerwonego();
+        sprawdzCzyOdbicOdBocznejSciany();
+    }
 
-            if(yPilka< x2GraczCzer || yPilka> x2GraczCzer+y2GraczCzer){
-
-                //  Log.d("aktualizujPolozenieKulki ","PILKA jest na krancu  czerwonego!");
-                  punktyNiebieskiegoInt++;
-                  init();
-            }
-            dx = dx*(-1);
-       }
-        if(xPilka <y1GraczCzer+rPilka){
-            if(yPilka< x2GraczNieb || yPilka> x2GraczNieb+y2GraczNieb){
-               // Log.d("odbijPilke ","PILKA jest na klocku niebieskim!");
-                punktyCzerwonegoInt++;
-                init();
-            }
-            dx = dx*(-1);
-
-        }
-        if(yPilka > getHeight()-40 || yPilka <40){
-            dy= dy* (-1);
+    private void sprawdzCzyOdbicOdBocznejSciany() {
+        if(element.yPilka > getHeight()-40 || element.yPilka <40){
+            element.dy= element.dy* (-1);
         }
     }
 
-    public void zmienPolozenieKulki(){
-        xPilka += dx;
-        yPilka += dy;
+    private void sprawdzCzyPunktDlaCzerwonego() {
+        if(element.xPilka <element.y1GraczCzer+element.rPilka){
+            if(element.yPilka< element.x2GraczNieb || element.yPilka> element.x2GraczNieb+element.y2GraczNieb){
+                // Log.d("odbijPilke ","PILKA jest na klocku niebieskim!");
+                element.punktyCzerwonegoInt++;
+                init();
+            }
+            element.dx = element.dx*(-1);
+        }
+    }
+
+    private void sprawdzCzyPunktDlaNiebieskiego() {
+        if(element.xPilka > getWidth()-(element.y1GraczCzer+element.rPilka) ){
+           if(element.yPilka< element.x2GraczCzer || element.yPilka> element.x2GraczCzer+element.y2GraczCzer){
+                //  Log.d("aktualizujPolozenieKulki ","PILKA jest na krancu  czerwonego!");
+               element.punktyNiebieskiegoInt++;
+                init();
+            }
+            element. dx = element.dx*(-1);
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         final int actionPeformed = event.getActionMasked();
-        int x;
-        int y;
+
 
         if (actionPeformed == MotionEvent.ACTION_MOVE) {
             int touchCounter = event.getPointerCount();
 
             for (int t = 0; t < touchCounter; t++) { // MULTITOUCH :)
-
+                int x;
+                int y;
                 int id = event.findPointerIndex(t);
 //                  Log.d("touchCounter, ", ""+ touchCounter+",  id: "+id);
                 if(id <0){
-                     x = (int) event.getX();
+                    x = (int) event.getX();
                     y = (int) event.getY();
                 }else {
 
                     x = (int) event.getX(id);
-                     y = (int) event.getY(id);
+                    y = (int) event.getY(id);
                 }
                 if(x<getWidth()/2 ) {
                     przesunNiebieski(y);
@@ -213,22 +190,22 @@ protected void onSizeChanged(int w, int h, int oldw, int oldh){
     }
 
     private void przesunCzerwony(float y) {
-        x2GraczCzer = y;
-        if(x2GraczCzer<8){
-            x2GraczCzer = 8;
+        element.x2GraczCzer = y;
+        if(element.x2GraczCzer<8){
+            element.x2GraczCzer = 8;
         }
-        if(x2GraczCzer>getHeight()-y2GraczCzer-8){
-            x2GraczCzer = getHeight()-y2GraczCzer-8;
+        if(element.x2GraczCzer>getHeight()-element.y2GraczCzer-8){
+            element.x2GraczCzer = getHeight()-element.y2GraczCzer-8;
         }
     }
 
     private void przesunNiebieski(float y) {
-        x2GraczNieb=y;
-        if(x2GraczNieb<8){
-            x2GraczNieb = 8;
+        element.x2GraczNieb=y;
+        if(element.x2GraczNieb<8){
+            element.x2GraczNieb = 8;
         }
-        if(x2GraczNieb>getHeight()-y2GraczNieb-8){
-            x2GraczNieb = getHeight()-y2GraczNieb-8;
+        if(element.x2GraczNieb>getHeight()-element.y2GraczNieb-8){
+            element.x2GraczNieb = getHeight()-element.y2GraczNieb-8;
         }
     }
 
