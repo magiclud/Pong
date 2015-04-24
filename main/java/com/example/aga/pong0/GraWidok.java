@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
 
 
 /**
@@ -60,14 +61,9 @@ public class GraWidok extends View {
 
         init();
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                handler = new Handler(Looper.getMainLooper()) {
-                };
-            }
-        });
-        thread.start();
+        handler = new Handler(Looper.getMainLooper()) {
+        };
+
     }
 
 
@@ -107,7 +103,7 @@ public class GraWidok extends View {
         graczCzerPaint.setColor(Color.RED);
     }
 
-    // metoda wywoluje sie na poczatku przed tworzeniem widoku, cos a'la konstruktir
+    // metoda wywoluje sie na poczatku przed tworzeniem widoku
 protected void onSizeChanged(int w, int h, int oldw, int oldh){
     Log.d("Cykl Zycia ","onSizeChanged");
 
@@ -137,14 +133,14 @@ protected void onSizeChanged(int w, int h, int oldw, int oldh){
             @Override
             public void run() {
                 invalidate();
-                try {
-                    Thread.sleep(30);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
             }
         });
-
+        try {
+            Thread.sleep(30);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //        paint.setColor(Color.RED);
 //        Path path = new Path();
@@ -156,13 +152,11 @@ protected void onSizeChanged(int w, int h, int oldw, int oldh){
         zmienPolozenieKulki();
         if(xPilka > getWidth()-(y1GraczCzer+rPilka) ){
 
-            if(yPilka< x2GraczCzer || yPilka> x2GraczCzer+y2GraczCzer){  //TODO napisz to w jedyn if i juz
+            if(yPilka< x2GraczCzer || yPilka> x2GraczCzer+y2GraczCzer){
 
                 //  Log.d("aktualizujPolozenieKulki ","PILKA jest na krancu  czerwonego!");
                   punktyNiebieskiegoInt++;
                   init();
-
-             // }
             }
             dx = dx*(-1);
        }
@@ -187,22 +181,35 @@ protected void onSizeChanged(int w, int h, int oldw, int oldh){
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-//        Log.d("Cykl Zycia ","onTouchEvent");
+        final int actionPeformed = event.getActionMasked();
+        int x;
+        int y;
 
-        int action = event.getAction();
-        int x = (int) event.getX();
-        int y = (int) event.getY();
+        if (actionPeformed == MotionEvent.ACTION_MOVE) {
+            int touchCounter = event.getPointerCount();
 
-        if (action == MotionEvent.ACTION_MOVE) {
-            if(x<getWidth()/2 ) {
-                przesunNiebieski(y);
+            for (int t = 0; t < touchCounter; t++) { // MULTITOUCH :)
+
+                int id = event.findPointerIndex(t);
+//                  Log.d("touchCounter, ", ""+ touchCounter+",  id: "+id);
+                if(id <0){
+                     x = (int) event.getX();
+                    y = (int) event.getY();
+                }else {
+
+                    x = (int) event.getX(id);
+                     y = (int) event.getY(id);
+                }
+                if(x<getWidth()/2 ) {
+                    przesunNiebieski(y);
+                }
+                if(x>getWidth()/2 ) {
+                    przesunCzerwony(y);
+                }
             }
-            if(x>getWidth()/2 ) {
-                przesunCzerwony(y);
-            }
-            invalidate();
         }
-        return true; //jak bedzie false to pomija
+
+    return true; //jak bedzie false to pomija
     }
 
     private void przesunCzerwony(float y) {
